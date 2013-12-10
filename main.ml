@@ -18,7 +18,6 @@ let main () =
   set_window_title "The one and only one Fire Project";
   dessine ();
   let fin = ref false in
-  let compteur_tour = ref 1 in
   let foudre = ref false in
   
   while (not(!fin)) do
@@ -32,7 +31,8 @@ let main () =
 	if stat.key = ' ' then 
 	  begin
 	    unite_temps (!foudre);
-			incr(compteur_tour);
+	    incr(compteur_tour);
+	    actualiser_tour();
 	    dessine ();
 	  end
 	else if stat.key = 'c' then
@@ -45,7 +45,7 @@ let main () =
 	else if stat.key = 'a' then
 	  sauver terrain 1
 	else if stat.key = 'e' then
-	  (charger 1; dessine () )
+	  (charger 1; dessine ())
 	else if stat.key = 'z' then
 	  move_pompier Up
 	else if stat.key = 'q' then
@@ -73,14 +73,14 @@ let main () =
 	  |Pompier ->
 	  	begin
 	  	if (!compteur_pompiers > 0 && case.pompier = 0 && case.element != Eau) then
-	    	(case.pompier <- 1; decr(compteur_pompiers));
+	    	(case.pompier <- 1; decr(compteur_pompiers); actualiser_nombre_pompiers());
 	    	dessine_case i j; pompier_x := j; pompier_y := i
 	    	end;
 
 	) with _ -> ()
       end;
     foudre := false;
-    if (!compteur_tour = 10) then (compteur_tour := 0; incr(compteur_pompiers));
+    if (!compteur_tour mod 10 = 0) then (incr(compteur_pompiers); actualiser_nombre_pompiers());
   done;
 ;;
 
