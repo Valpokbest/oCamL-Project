@@ -119,7 +119,7 @@ let move_pompier dir =
 		|Left -> (!pompier_x)>0 && terrain.(!pompier_y).(!pompier_x-1).element != Eau && terrain.(!pompier_y).(!pompier_x-1).pompier = 0
 		|Right -> (!pompier_x)<m && terrain.(!pompier_y).(!pompier_x+1).element != Eau && terrain.(!pompier_y).(!pompier_x+1).pompier = 0 in
 		
-  if (terrain.(!pompier_y).(!pompier_x).pompier < 4 && possible) then
+  if (terrain.(!pompier_y).(!pompier_x).pompier > 0 && terrain.(!pompier_y).(!pompier_x).pompier < 4 && possible) then
     begin
       let (i,j) =
 	match dir with
