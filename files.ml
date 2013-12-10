@@ -36,6 +36,8 @@ let sauver carte num =
 	
 let charger num = 
 	let fichier = open_in ("Saves/"^string_of_int(num)^".map") in
+	compteur_tour := int_of_string(input_line fichier);
+	compteur_pompiers := int_of_string(input_line fichier);
 	let nb_rows = int_of_string(input_line fichier) in
 	let nb_cols = int_of_string(input_line fichier) in
 	for i=0 to nb_rows-1 do
