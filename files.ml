@@ -36,8 +36,13 @@ let charger num =
 	let nb_cols = int_of_string(input_line fichier) in
 	for i=0 to nb_rows-1 do
 		for j=0 to nb_cols-1 do
-			let premier_code = Char.escaped (input_char fichier) in
-			let code_biome = premier_code^(Char.escaped (input_char fichier)) in
+			let premier_code = String.make 1 (input_char fichier) in
+			let deuxieme_code = String.make 1 (input_char fichier) in
+			let code_biome = premier_code^deuxieme_code in
+			(*print_string premier_code;
+			print_newline();
+			print_string deuxieme_code;
+			print_newline();*)
 			print_string code_biome;
 			let elt = (match code_biome with
 				|"00" -> Eau
