@@ -78,7 +78,7 @@ let main () =
 	) with _ -> ()
       end;
     foudre := false;
-    if (!compteur_tour = 10) then (compteur_tour := 0; compteur_pompiers++)
+    if (!compteur_tour = 10) then (compteur_tour := 0; incr(compteur_pompiers))
   done;
 ;;
 
