@@ -71,14 +71,14 @@ let main () =
 	  |Pompier ->
 	  	begin
 	  	if (!compteur_pompiers > 0 && case.pompier = 0 && case.element != Eau) then
-	    	(case.pompier <- 1; decr(compteur_pompiers))
+	    	(case.pompier <- 1; decr(compteur_pompiers));
 	    	dessine_case i j; pompier_x := j; pompier_y := i
 	    	end;
 
 	) with _ -> ()
       end;
     foudre := false;
-    if (!compteur_tour = 10) then (compteur_tour := 0; incr(compteur_pompiers))
+    if (!compteur_tour = 10) then (compteur_tour := 0; incr(compteur_pompiers));
   done;
 ;;
 
