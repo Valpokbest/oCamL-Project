@@ -45,7 +45,7 @@ let main () =
 	else if stat.key = 'a' then
 	  sauver terrain 1
 	else if stat.key = 'e' then
-	  charger 1
+	  (charger 1; dessine () )
 	else if stat.key = 'z' then
 	  move_pompier Up
 	else if stat.key = 'q' then
