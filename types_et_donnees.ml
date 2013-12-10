@@ -29,6 +29,7 @@ let wind_direction = SO;;
 let rain = false;;
 let thunder = true;;
 
+let compteur_tour = ref 1;;
 let action_souris = ref Feu;;
 let pompier_x = ref 0;;
 let pompier_y = ref 0;;
