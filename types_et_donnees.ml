@@ -32,6 +32,7 @@ let thunder = true;;
 let action_souris = ref Feu;;
 let pompier_x = ref 0;;
 let pompier_y = ref 0;;
+let compteur_pompiers = ref 0;;
 
 (* Taille du terrain *)
 let n = 5;; (* lignes *)
