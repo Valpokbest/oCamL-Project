@@ -69,7 +69,11 @@ let main () =
 	  |Water ->
 	    terrain.(i).(j) <- init_case(Eau); dessine_case i j
 	  |Pompier ->
-	    case.pompier <- 1; dessine_case i j; pompier_x := j; pompier_y := i
+	  	begin
+	  	if (case.pompier <- 0) then
+	    	case.pompier <- 1;
+	    	dessine_case i j; pompier_x := j; pompier_y := i
+	    	end;
 
 	) with _ -> ()
       end;
