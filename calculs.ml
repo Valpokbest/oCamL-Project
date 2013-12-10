@@ -35,7 +35,7 @@ let allumer_feu case =
 ;;
 
 let maj_feu case i = (*i=1 pour augmenter feu; i=2 pour diminuer feu*)
-  if (case.pompier = 0) then
+  if (case.pompier = 0 && not(case.calcine)) then
     begin
       if (i=1) then
 	begin
