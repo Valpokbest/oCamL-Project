@@ -48,7 +48,6 @@ let charger num =
 			let case = init_case(elt) in
 			case.intensite_feu <- int_of_char(input_char fichier);
 			let c = input_char fichier in
-			print_char c;
 			case.calcine <- (match c with
 				|'0' -> false
 				|'1' -> true);
