@@ -113,34 +113,22 @@ let tout_en_feu () =
   !check;;
 
 let move_pompier dir =
-  if (terrain.(!pompier_y).(!pompier_x).pompier < 4) then
+	let possible = match dir with
+		|Up -> (!pompier_y)>0 && terrain.(!pompier_y-1).(!pompier_x).element != Eau
+		|Down -> (!pompier_y)<n && terrain.(!pompier_y+1).(!pompier_x).element != Eau
+		|Left -> (!pompier_x)>0 && terrain.(!pompier_y).(!pompier_x-1).element != Eau
+		|Right -> (!pompier_x)<m && terrain.(!pompier_y).(!pompier_x+1).element != Eau in
+		
+  if (terrain.(!pompier_y).(!pompier_x).pompier < 4 && possible) then
     begin
       let (i,j) =
 	match dir with
-	  | Up -> if (terrain.(!pompier_y-1).(!pompier_x).element != Eau) then
-	  begin
-	  	terrain.(i).(j).pompier <- terrain.(!pompier_y).(!pompier_x).pompier + 1;
-      		terrain.(!pompier_y).(!pompier_x).pompier <- 0;
-      		(!pompier_y-1,!pompier_x)
-      	  end
-	  | Down ->  if (terrain.(!pompier_y+1).(!pompier_x).element != Eau) then
-	  begin
-	  	terrain.(i).(j).pompier <- terrain.(!pompier_y).(!pompier_x).pompier + 1;
-      		terrain.(!pompier_y).(!pompier_x).pompier <- 0;
-	  	(!pompier_y+1,!pompier_x)
-	  end
-	  | Left ->  if (terrain.(!pompier_y).(!pompier_x-1).element != Eau) then
-	  begin
-	  	terrain.(i).(j).pompier <- terrain.(!pompier_y).(!pompier_x).pompier + 1;
-      		terrain.(!pompier_y).(!pompier_x).pompier <- 0;
-	  	(!pompier_y,!pompier_x-1)
-	  end
-	  | Right ->  if (terrain.(!pompier_y).(!pompier_x+1).element != Eau) then
-	  begin
-	  	terrain.(i).(j).pompier <- terrain.(!pompier_y).(!pompier_x).pompier + 1;
-      		terrain.(!pompier_y).(!pompier_x).pompier <- 0;
-	  	(!pompier_y,!pompier_x+1)
-	  end in
+	  | Up ->  (!pompier_y-1,!pompier_x)
+	  | Down ->  (!pompier_y+1,!pompier_x)
+	  | Left -> (!pompier_y,!pompier_x-1)
+	  | Right -> (!pompier_y,!pompier_x+1) in
+	terrain.(i).(j).pompier <- terrain.(!pompier_y).(!pompier_x).pompier + 1;
+      	terrain.(!pompier_y).(!pompier_x).pompier <- 0;
       dessine_case (!pompier_y) (!pompier_x);
       pompier_x := j;
       pompier_y := i;
