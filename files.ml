@@ -45,7 +45,7 @@ let charger num =
 				|"02" -> Plaine
 				|"03" -> Maison) in
 			let case = init_case(elt) in
-			case.intensite_feu <- int_of_char(input_char fichier);
+			case.intensite_feu <- int_of_string(String.make 1 (input_char fichier));
 			let c = input_char fichier in
 			case.calcine <- (match c with
 				|'0' -> false
@@ -56,7 +56,7 @@ let charger num =
 			case.brule <- (match (input_char fichier) with
 				|'0' -> false
 				|'1' -> true);
-			case.pompier <- int_of_char(input_char fichier);
+			case.pompier <- int_of_string(String.make 1 (input_char fichier));
 			let vider_ligne = input_line fichier in
 			terrain.(i).(j) <- case;
 		done;
