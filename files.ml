@@ -30,30 +30,32 @@ let sauver carte num =
 	done;
 	close_out fichier;;
 	
-(*let charger num = 
+let charger num = 
 	let fichier = open_in ("Saves/"^string_of_int(num)^".map") in
 	let nb_rows = int_of_string(input_line fichier) in
 	let nb_cols = int_of_string(input_line fichier) in
-	let chargement = Array.make_matrix nb_rows nb_cols (init_case(Foret)) in
 	for i=0 to nb_rows-1 do
 		for j=0 to nb_cols-1 do
-			let code_biome = (string_of_int (int_of_char (input_char fichier)))^(string_of_int (int_of_char (input_char fichier))) in
-			chargement.(i).(j).element <- match code_biome with
+			let premier_code = Char.escaped (input_char fichier) in
+			let code_biome = premier_code^(Char.escaped (input_char fichier)) in
+			print_string code_biome;
+			let elt = (match code_biome with
 				|"00" -> Eau
 				|"01" -> Foret
 				|"02" -> Plaine
-				|"03" -> Maison;
-			chargement.(i).(j).intensite_feu <- int_of_char(input_char fichier);
-			chargement.(i).(j).calcine <- match (input_char fichier) with
+				|"03" -> Maison) in
+			let case = init_case(elt) in
+			case.intensite_feu <- int_of_char(input_char fichier);
+			case.calcine <- (match (input_char fichier) with
 				|'0' -> false
-				|'1' -> true;
-			chargement.(i).(j).estompe <- match (input_char fichier) with
+				|'1' -> true);
+			case.estompe <- (match (input_char fichier) with
 				|'0' -> false
-				|'1' -> true;
-			chargement.(i).(j).brule <- match (input_char fichier) with
+				|'1' -> true);
+			case.brule <- (match (input_char fichier) with
 				|'0' -> false
-				|'1' -> true;
-			chargement.(i).(j).pompier <- int_of_char(input_char fichier);
+				|'1' -> true);
+			case.pompier <- int_of_char(input_char fichier);
+			terrain.(i).(j) <- case;
 		done;
-	done;
-	chargement;;*)
+	done;;
