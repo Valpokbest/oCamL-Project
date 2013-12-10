@@ -61,7 +61,7 @@ let charger num =
 				|'0' -> false
 				|'1' -> true);
 			case.pompier <- int_of_char(input_char fichier);
-			let c = input_line fichier;
+			input_line fichier;
 			terrain.(i).(j) <- case;
 		done;
 	done;;
