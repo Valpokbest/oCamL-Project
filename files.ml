@@ -1,9 +1,11 @@
 (*#load "types_et_donnees.cmo";;
-#load "generation_de_terrains.cmo";;*)
+#load "generation_de_terrains.cmo";;
+#load "fenetre_graphique.cmo";;*)
 (* à décommenter si non compilé *)
 
 open Types_et_donnees;;
 open Generation_de_terrains;;
+open Fenetre_graphique;;
 
 let sauver carte num = 
 	let nb_rows=Array.length carte and nb_cols=Array.length carte.(0) in
@@ -37,7 +39,9 @@ let sauver carte num =
 let charger num = 
 	let fichier = open_in ("Saves/"^string_of_int(num)^".map") in
 	compteur_tour := int_of_string(input_line fichier);
+	actualiser_tour ();
 	compteur_pompiers := int_of_string(input_line fichier);
+	actualiser_nombre_pompiers ();
 	let nb_rows = int_of_string(input_line fichier) in
 	let nb_cols = int_of_string(input_line fichier) in
 	for i=0 to nb_rows-1 do
