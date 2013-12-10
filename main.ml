@@ -33,6 +33,7 @@ let main () =
 	    unite_temps (!foudre);
 	    incr(compteur_tour);
 	    actualiser_tour();
+    	    if (!compteur_tour mod 10 = 0) then (incr(compteur_pompiers); actualiser_nombre_pompiers());
 	    dessine ();
 	  end
 	else if stat.key = 'c' then
@@ -80,7 +81,6 @@ let main () =
 	) with _ -> ()
       end;
     foudre := false;
-    if (!compteur_tour mod 10 = 0) then (incr(compteur_pompiers); actualiser_nombre_pompiers());
   done;
 ;;
 
