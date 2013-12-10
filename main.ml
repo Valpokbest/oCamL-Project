@@ -70,15 +70,15 @@ let main () =
 	    terrain.(i).(j) <- init_case(Eau); dessine_case i j
 	  |Pompier ->
 	  	begin
-	  	if (case.pompier = 0 && case.element != Eau) then
-	    	case.pompier <- 1;
+	  	if (!compteur_pompiers > 0 && case.pompier = 0 && case.element != Eau) then
+	    	(case.pompier <- 1; decr(compteur_pompiers))
 	    	dessine_case i j; pompier_x := j; pompier_y := i
 	    	end;
 
 	) with _ -> ()
       end;
     foudre := false;
-    if (!compteur_tour = 10) then compteur_tour := 0;
+    if (!compteur_tour = 10) then (compteur_tour := 0; compteur_pompiers++)
   done;
 ;;
 
