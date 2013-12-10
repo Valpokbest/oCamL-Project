@@ -7,13 +7,23 @@ open Graphics;;
 open Types_et_donnees;;
 open Generation_de_terrains;;
 
-let taille_x = m*20;;
-let taille_y = n*20;;
-let offset = 20;;
+(* Résolution max de l'écran *)
+let max_x = 1280;;
+let max_y = 1024;;
+let offset = 10;;
 
-let ouvrir () = open_graph (" "^string_of_int(taille_x+2*offset)^"x"^string_of_int(taille_y+2*offset));;
+let taille_case = 20;; 
+let largeur_raccourcis = 200;;
+let hauteur_raccourcis = 200;;
 
-let cote = min (taille_y/n) (taille_x/m);;
+let cote =
+  let taille_x = min (max_x-3*offset-largeur_raccourcis-50) (m*taille_case) in
+  let taille_y = min (max_y-2*offset-100) (n*taille_case) in
+
+min (taille_y/n) (taille_x/m);;
+
+let taille_x = m*cote;;
+let taille_y = n*cote;;
 
 let pos i j =
   (* Renvoie (x,y) la position du pixel en bas à gauche de la case correspondant à la ligne i et la colonne j *)
@@ -92,7 +102,60 @@ let dessine_case i j =
     end;
 ;;
 
-let dessine () =      
+let dessine_raccourcis () =
+  let debut_gauche = 2*offset + taille_x in
+  let debut_haut = size_y()-2*offset in
+  let ecart = 20 in
+
+  set_color black;
+  set_text_size 15;
+  moveto (debut_gauche+20) debut_haut;
+  draw_string "Commandes :";
+  moveto debut_gauche (debut_haut-ecart);
+  draw_string "'p' : selectionner pompier";
+  moveto debut_gauche (debut_haut-2*ecart);
+  draw_string "'f' : selectionner feu";
+  moveto debut_gauche (debut_haut-3*ecart);
+  draw_string "'c' : fermer la fenetre";
+  moveto debut_gauche (debut_haut-4*ecart);
+  draw_string "'SPACE' : passer au tour suivant";
+  moveto (debut_gauche+20) (debut_haut-6*ecart);
+  draw_string "Donnees :";
+  moveto debut_gauche (debut_haut-7*ecart);
+  draw_string "0 pompier disponible";
+  moveto debut_gauche (debut_haut-8*ecart);
+  draw_string "Tour 1";
+;;
+
+let actualiser_nombre_pompiers () =
+  let debut_gauche = 2*offset + taille_x in
+  let ecart = 20 in
+  let debut_haut = size_y()-2*offset-7*ecart in
+
+  set_color white;
+  fill_rect debut_gauche debut_haut (offset+largeur_raccourcis) (ecart/2);
+  set_color black;
+  moveto debut_gauche debut_haut;
+
+  let k = !compteur_pompiers in
+  if k <= 1 then draw_string ((string_of_int (!compteur_pompiers))^" pompier disponible")
+  else draw_string ((string_of_int (!compteur_pompiers))^" pompiers disponibles")
+;;
+
+let actualiser_tour () =
+  let debut_gauche = 2*offset + taille_x in
+  let ecart = 20 in
+  let debut_haut = size_y()-2*offset-8*ecart in
+
+  set_color white;
+  fill_rect debut_gauche debut_haut (offset+largeur_raccourcis) (ecart/2);
+  set_color black;
+  moveto debut_gauche debut_haut;
+
+  draw_string ("Tour "^(string_of_int (!compteur_tour)))
+;;
+
+let dessine () =
   for i = 0 to (n-1) do
     for j = 0 to (m-1) do
       dessine_case i j
@@ -104,3 +167,8 @@ let dessine_foudre i j =
   let x,y = pos i j in
   set_color yellow;
   fill_rect x y (cote-1) (cote-1);;
+
+let ouvrir () =
+  open_graph (" "^string_of_int(taille_x+3*offset+largeur_raccourcis)^"x"^string_of_int(max hauteur_raccourcis (taille_y+2*offset)));
+  dessine_raccourcis ()
+;;
