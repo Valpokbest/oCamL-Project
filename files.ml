@@ -8,6 +8,10 @@ open Generation_de_terrains;;
 let sauver carte num = 
 	let nb_rows=Array.length carte and nb_cols=Array.length carte.(0) in
 	let fichier = open_out ("Saves/"^string_of_int(num)^".map") in
+	output_string fichier (string_of_int(!compteur_tour));
+	output_string fichier "\n";
+	output_string fichier (string_of_int(!compteur_pompiers));
+	output_string fichier "\n";
 	output_string fichier (string_of_int(nb_rows));
 	output_string fichier "\n";
 	output_string fichier (string_of_int(nb_cols));
