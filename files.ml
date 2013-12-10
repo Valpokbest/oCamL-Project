@@ -39,10 +39,6 @@ let charger num =
 			let premier_code = String.make 1 (input_char fichier) in
 			let deuxieme_code = String.make 1 (input_char fichier) in
 			let code_biome = premier_code^deuxieme_code in
-			print_string premier_code;
-			print_newline();
-			print_string deuxieme_code;
-			print_newline();
 			print_string code_biome;
 			let elt = (match code_biome with
 				|"00" -> Eau
@@ -51,7 +47,9 @@ let charger num =
 				|"03" -> Maison) in
 			let case = init_case(elt) in
 			case.intensite_feu <- int_of_char(input_char fichier);
-			case.calcine <- (match (input_char fichier) with
+			let c = input_char fichier in
+			print_char c;
+			case.calcine <- (match c with
 				|'0' -> false
 				|'1' -> true);
 			case.estompe <- (match (input_char fichier) with
