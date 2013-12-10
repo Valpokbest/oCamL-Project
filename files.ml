@@ -39,10 +39,10 @@ let charger num =
 			let premier_code = String.make 1 (input_char fichier) in
 			let deuxieme_code = String.make 1 (input_char fichier) in
 			let code_biome = premier_code^deuxieme_code in
-			(*print_string premier_code;
+			print_string premier_code;
 			print_newline();
 			print_string deuxieme_code;
-			print_newline();*)
+			print_newline();
 			print_string code_biome;
 			let elt = (match code_biome with
 				|"00" -> Eau
@@ -61,6 +61,7 @@ let charger num =
 				|'0' -> false
 				|'1' -> true);
 			case.pompier <- int_of_char(input_char fichier);
+			let c = input_line fichier;
 			terrain.(i).(j) <- case;
 		done;
 	done;;
