@@ -114,10 +114,10 @@ let tout_en_feu () =
 
 let move_pompier dir =
 	let possible = match dir with
-		|Up -> (!pompier_y)>0 && terrain.(!pompier_y-1).(!pompier_x).element != Eau
-		|Down -> (!pompier_y)<n && terrain.(!pompier_y+1).(!pompier_x).element != Eau
-		|Left -> (!pompier_x)>0 && terrain.(!pompier_y).(!pompier_x-1).element != Eau
-		|Right -> (!pompier_x)<m && terrain.(!pompier_y).(!pompier_x+1).element != Eau in
+		|Up -> (!pompier_y)>0 && terrain.(!pompier_y-1).(!pompier_x).element != Eau && terrain.(!pompier_y-1).(!pompier_x).pompier = 0
+		|Down -> (!pompier_y)<n && terrain.(!pompier_y+1).(!pompier_x).element != Eau && terrain.(!pompier_y+1).(!pompier_x).pompier = 0
+		|Left -> (!pompier_x)>0 && terrain.(!pompier_y).(!pompier_x-1).element != Eau && terrain.(!pompier_y).(!pompier_x-1).pompier = 0
+		|Right -> (!pompier_x)<m && terrain.(!pompier_y).(!pompier_x+1).element != Eau && terrain.(!pompier_y).(!pompier_x+1).pompier = 0 in
 		
   if (terrain.(!pompier_y).(!pompier_x).pompier < 4 && possible) then
     begin
