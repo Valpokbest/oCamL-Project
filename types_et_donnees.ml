@@ -35,5 +35,5 @@ let pompier_y = ref 0;;
 let compteur_pompiers = ref 0;;
 
 (* Taille du terrain *)
-let n = 5;; (* lignes *)
-let m = 5;; (* colonnes *)
+let n = 30;; (* lignes *)
+let m = 40;; (* colonnes *)
