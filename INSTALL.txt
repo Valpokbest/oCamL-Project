@@ -1,8 +1,8 @@
 Compilation :
 Se placer dans le dossier où se trouvent tous les fichiers sources, puis faites la commande :
 
-ocamlc -c types_et_donnees.ml generation_de_terrains.ml files.ml fenetre_graphique.ml calculs.ml main.ml 
-ocamlc graphics.cma types_et_donnees.cmo generation_de_terrains.cmo files.cmo fenetre_graphique.cmo calculs.cmo main.cmo -o main
+ocamlc -c types_et_donnees.ml generation_de_terrains.ml fenetre_graphique.ml calculs.ml files.ml main.ml 
+ocamlc graphics.cma types_et_donnees.cmo generation_de_terrains.cmo fenetre_graphique.cmo calculs.cmo files.cmo main.cmo -o main
 
 Exécution :
 ./main ou ocamlrun main
