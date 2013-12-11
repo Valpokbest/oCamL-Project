@@ -1,4 +1,4 @@
-type element = Eau | Foret | Plaine | Maison;;
+type element = Eau | Foret | Plaine | Maison | Centrale;;
 type direction = Haut | Bas | Gauche | Droite | NO | NE | SO | SE;;
 type mouvement = Up | Down | Left | Right;;
 type action = Feu | Pompier | Water;;
@@ -16,8 +16,9 @@ type terrain = case array array;;
 
 (* Densités des terrains : la somme doit valoir 1 *)
 let prob_foret = 0.43;;
-let prob_plaine = 0.35;;
+let prob_plaine = 0.34;;
 let prob_eau = 0.22;;
+let prob_centrale = 0.01;;
 
 let prob_maison = 0.15;;
 let prob_foudre = 0.5;;
