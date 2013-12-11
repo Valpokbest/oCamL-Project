@@ -18,6 +18,8 @@ let terrain_aleatoire hauteur largeur =
 	m.(i).(j) <- init_case(Foret)
       else if (random <= int_of_float(1000. *. (prob_foret +. prob_plaine))) then
 	m.(i).(j) <- init_case(Plaine)
+      else if (random <= int_of_float(1000. *. (prob_foret +. prob_plaine +. prob_centrale))) then
+	m.(i).(j) <- init_case(Centrale)
       else
 	m.(i).(j) <- init_case(Eau);
     done;
