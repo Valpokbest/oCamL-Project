@@ -72,9 +72,9 @@ let main () =
 	  |Water ->
 	    terrain.(i).(j) <- init_case(Eau); dessine_case i j
 	  |Pompier ->
-	  	if (!compteur_pompiers > 0 && case.intensite_feu = 0 && case.element != Eau) then
+	  	if (case.intensite_feu = 0 && case.element != Eau) then
 	  	begin
-	  	if (case.pompier = 0) then
+	  	if (!compteur_pompiers > 0 && case.pompier = 0) then
 	    	(case.pompier <- 1; decr(compteur_pompiers); actualiser_nombre_pompiers());
 	    	dessine_case i j; pompier_x := j; pompier_y := i
 	    	end;
