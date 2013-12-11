@@ -43,11 +43,13 @@ let intensite_max ele = match ele with
   | Foret -> 4
   | Maison -> 8
   | Eau -> -1
+  | Centrale -> 1
 ;;
 
 let bleu = rgb 72 118 255;;
 let vert = rgb 0 100 0;;
 let vert_clair = rgb 102 205 0;;
+let vert_moche = rgb 151 188 56;;
 let rouge case = match case.element with
   | Eau -> bleu
   | e -> rgb (50 + (200/(intensite_max(e))*case.intensite_feu)) 0 0
@@ -59,6 +61,7 @@ let couleur case = match case.element with
   | Foret -> vert
   | Plaine -> vert_clair
   | Maison -> marron
+  | Centrale -> vert_moche
 ;;
 
 let dessine_case i j =
