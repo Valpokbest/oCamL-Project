@@ -24,7 +24,8 @@ let sauver carte num =
 				|Eau -> "00"
 				|Foret -> "01"
 				|Plaine -> "02"
-				|Maison -> "03" in
+				|Maison -> "03"
+				|Centrale -> "04" in
 			output_string fichier biome;
 			output_string fichier (string_of_int(carte.(i).(j).intensite_feu));
 			if (carte.(i).(j).calcine) then output_string fichier "1" else output_string fichier "0";
@@ -53,7 +54,8 @@ let charger num =
 				|"00" -> Eau
 				|"01" -> Foret
 				|"02" -> Plaine
-				|"03" -> Maison) in
+				|"03" -> Maison
+				|"04" -> Centrale) in
 			let case = init_case(elt) in
 			case.intensite_feu <- int_of_string(String.make 1 (input_char fichier));
 			let c = input_char fichier in
