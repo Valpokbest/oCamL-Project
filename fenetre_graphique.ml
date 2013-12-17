@@ -14,7 +14,7 @@ let offset = 10;;
 
 let taille_case = 20;; 
 let largeur_raccourcis = 200;;
-let hauteur_raccourcis = 220;;
+let hauteur_raccourcis = 260;;
 
 let cote =
   let taille_x = min (max_x-3*offset-largeur_raccourcis-50) (m*taille_case) in
@@ -49,7 +49,7 @@ let intensite_max ele = match ele with
 let bleu = rgb 72 118 255;;
 let vert = rgb 0 100 0;;
 let vert_clair = rgb 102 205 0;;
-let vert_moche = rgb 151 188 56;;
+let gris = rgb 131 139 139;;
 let rouge case = match case.element with
   | Eau -> bleu
   | e -> rgb (50 + (200/(intensite_max(e))*case.intensite_feu)) 0 0
@@ -61,7 +61,7 @@ let couleur case = match case.element with
   | Foret -> vert
   | Plaine -> vert_clair
   | Maison -> marron
-  | Centrale -> vert_moche
+  | Centrale -> gris
 ;;
 
 let dessine_case i j =
@@ -105,6 +105,17 @@ let dessine_case i j =
     end;
 ;;
 
+let string_of_dir dir = match dir with
+  | Haut -> "Nord"
+  | Bas -> "Sud"
+  | Droite -> "Est"
+  | Gauche -> "Ouest"
+  | NE -> "Nord-Est"
+  | NO -> "Nord-Ouest"
+  | SO -> "Sud-Ouest"
+  | SE -> "Sud-Est"
+;;
+
 let dessine_raccourcis () =
   let debut_gauche = 2*offset + taille_x in
   let debut_haut = size_y()-2*offset in
@@ -119,23 +130,30 @@ let dessine_raccourcis () =
   moveto debut_gauche (debut_haut-2*ecart);
   draw_string "'f' : selectionner feu";
   moveto debut_gauche (debut_haut-3*ecart);
-  draw_string "'l' : charger un terrain";
+  draw_string "'k' : sauvegarder terrain";
   moveto debut_gauche (debut_haut-4*ecart);
-  draw_string "'c' : fermer la fenetre";
+  draw_string "'l' : charger terrain";
   moveto debut_gauche (debut_haut-5*ecart);
+  draw_string "'c' : fermer la fenetre";
+  moveto debut_gauche (debut_haut-6*ecart);
+  draw_string "'i' : selectionner IA";
+  moveto debut_gauche (debut_haut-7*ecart);
   draw_string "'SPACE' : passer au tour suivant";
-  moveto (debut_gauche+20) (debut_haut-7*ecart);
+  moveto (debut_gauche+20) (debut_haut-9*ecart);
   draw_string "Donnees :";
-  moveto debut_gauche (debut_haut-8*ecart);
+  moveto debut_gauche (debut_haut-10*ecart);
   draw_string "0 pompier disponible";
-  moveto debut_gauche (debut_haut-9*ecart);
+  moveto debut_gauche (debut_haut-11*ecart);
   draw_string "Tour 1";
+  moveto debut_gauche (debut_haut-12*ecart);
+  if wind then draw_string ("Direction du vent : "^string_of_dir wind_direction)
+  else draw_string "Pas de vent";
 ;;
 
 let actualiser_nombre_pompiers () =
   let debut_gauche = 2*offset + taille_x in
   let ecart = 20 in
-  let debut_haut = size_y()-2*offset-8*ecart in
+  let debut_haut = size_y()-2*offset-10*ecart in
 
   set_color white;
   fill_rect debut_gauche debut_haut (offset+largeur_raccourcis) (ecart/2);
@@ -150,7 +168,7 @@ let actualiser_nombre_pompiers () =
 let actualiser_tour () =
   let debut_gauche = 2*offset + taille_x in
   let ecart = 20 in
-  let debut_haut = size_y()-2*offset-9*ecart in
+  let debut_haut = size_y()-2*offset-11*ecart in
 
   set_color white;
   fill_rect debut_gauche debut_haut (offset+largeur_raccourcis) (ecart/2);
