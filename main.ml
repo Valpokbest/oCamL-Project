@@ -27,39 +27,21 @@ let main () =
     let y = stat.mouse_y in
     
     if stat.keypressed then
-      begin
-	if stat.key = ' ' then 
-	  begin
-	    unite_temps (!foudre);
-	    incr(compteur_tour);
-	    actualiser_tour();
-    	    if (!compteur_tour mod 10 = 0) then (incr(compteur_pompiers); actualiser_nombre_pompiers());
-	    dessine ();
-	  end
-	else if stat.key = 'c' then
-	  begin
-	    fin:=true;
-	    close_graph();
-	  end
-	else if stat.key = 'p' then
-	  action_souris := Pompier
-	else if stat.key = 'a' then
-	  sauver terrain 1
-	else if stat.key = 'l' then
-	  (charger 1; dessine ())
-	else if stat.key = 'z' then
-	  move_pompier Up
-	else if stat.key = 'q' then
-	  move_pompier Left
-	else if stat.key = 'd' then
-	  move_pompier Right
-	else if stat.key = 's' then
-	  move_pompier Down
-	else if stat.key = 'w' then
-	  action_souris := Water
-	else if stat.key = 'f' then
-	  action_souris := Feu;
-      end
+      match stat.key with
+	| ' '  -> unite_temps (!foudre); incr(compteur_tour); actualiser_tour();
+    	  if (!compteur_tour mod 10 = 0) then (incr(compteur_pompiers); actualiser_nombre_pompiers());
+	  dessine ()
+	| 'c' -> fin:=true; close_graph()
+	| 'p' -> action_souris := Pompier
+	| 'k' -> sauver terrain 1
+	| 'l' -> charger 1; dessine ()
+	| 'z' -> move_pompier Up
+	| 'q' -> move_pompier Left
+	| 'd' -> move_pompier Right
+	| 's' -> move_pompier Down
+	| 'w' -> action_souris := Water
+	| 'f' -> action_souris := Feu;
+	| _ -> () 
 
     else
       begin
@@ -67,11 +49,12 @@ let main () =
 	try (
 	let case = terrain.(i).(j) in
 	match (!action_souris) with
-	  |Feu -> 
+	  | Feu -> 
 	    if case.intensite_feu = 0 then (allumer_feu case; dessine_case i j)
-	  |Water ->
+	    else (eteindre_feu case; dessine_case i j)
+	  | Water ->
 	    terrain.(i).(j) <- init_case(Eau); dessine_case i j
-	  |Pompier ->
+	  | Pompier ->
 	  	if (case.intensite_feu = 0 && case.element != Eau) then
 	  	begin
 	  	if (!compteur_pompiers > 0 && case.pompier = 0) then
