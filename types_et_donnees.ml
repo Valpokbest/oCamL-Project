@@ -35,7 +35,7 @@ let action_souris = ref Feu;;
 let pompier_x = ref 0;;
 let pompier_y = ref 0;;
 let compteur_pompiers = ref 0;;
-let liste_pompiers = ref [];;
+let liste_pompiers : ((int*int) list) ref = ref [];;
 
 (* Taille du terrain *)
 let n = 30;; (* lignes *)
