@@ -6,3 +6,5 @@ ocamlc graphics.cma types_et_donnees.cmo generation_de_terrains.cmo fenetre_grap
 
 Exécution :
 ./main ou ocamlrun main
+
+Si le dossier Saves n'existe pas, créez le.
