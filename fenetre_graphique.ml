@@ -14,7 +14,7 @@ let offset = 10;;
 
 let taille_case = 20;; 
 let largeur_raccourcis = 200;;
-let hauteur_raccourcis = 260;;
+let hauteur_raccourcis = 300;;
 
 let cote =
   let taille_x = min (max_x-3*offset-largeur_raccourcis-50) (m*taille_case) in
@@ -148,6 +148,9 @@ let dessine_raccourcis () =
   moveto debut_gauche (debut_haut-12*ecart);
   if wind then draw_string ("Direction du vent : "^string_of_dir wind_direction)
   else draw_string "Pas de vent";
+  moveto debut_gauche (debut_haut-13*ecart);
+  if rain then draw_string "Pluie"
+  else draw_string "Pas de pluie";
 ;;
 
 let actualiser_nombre_pompiers () =
