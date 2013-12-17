@@ -45,7 +45,7 @@ let main () =
 	  action_souris := Pompier
 	else if stat.key = 'a' then
 	  sauver terrain 1
-	else if stat.key = 'e' then
+	else if stat.key = 'l' then
 	  (charger 1; dessine ())
 	else if stat.key = 'z' then
 	  move_pompier Up
