@@ -83,7 +83,6 @@ let explosion carte k l =
     |SE -> (2,2) in
   for i=0 to n-1 do
     for j=0 to m-1 do
-      if carte.(i).(j).element <> Eau then
       if ((abs (i+coeffx-k) + abs (j+coeffy-l)) < 6) then
 	(carte.(i).(j).intensite_feu <- 0;
 	  carte.(i).(j).calcine <- true);
@@ -136,13 +135,24 @@ let tout_en_feu () =
   
   !check;;
 
+let actualise_pompier i j k l =
+  let liste = !liste_pompiers in
+
+  let rec aux = function
+    | [] -> []
+    | t::q when t = (i,j) -> (k,l)::q
+    | t::q -> t::(aux q)
+  in
+
+liste_pompiers := aux liste;;
+
 let move_pompier dir =
-	let possible = match dir with
-		|Up -> (!pompier_y)>0 && terrain.(!pompier_y-1).(!pompier_x).element != Eau && terrain.(!pompier_y-1).(!pompier_x).pompier = 0 && terrain.(!pompier_y-1).(!pompier_x).intensite_feu = 0
-		|Down -> (!pompier_y)<n && terrain.(!pompier_y+1).(!pompier_x).element != Eau && terrain.(!pompier_y+1).(!pompier_x).pompier = 0 && terrain.(!pompier_y+1).(!pompier_x).intensite_feu = 0
-		|Left -> (!pompier_x)>0 && terrain.(!pompier_y).(!pompier_x-1).element != Eau && terrain.(!pompier_y).(!pompier_x-1).pompier = 0 && terrain.(!pompier_y).(!pompier_x-1).intensite_feu = 0
-		|Right -> (!pompier_x)<m && terrain.(!pompier_y).(!pompier_x+1).element != Eau && terrain.(!pompier_y).(!pompier_x+1).pompier = 0 && terrain.(!pompier_y).(!pompier_x+1).intensite_feu = 0 in
-		
+  let possible = match dir with
+    | Up -> (!pompier_y)>0 && terrain.(!pompier_y-1).(!pompier_x).element != Eau && terrain.(!pompier_y-1).(!pompier_x).pompier = 0 && terrain.(!pompier_y-1).(!pompier_x).intensite_feu = 0
+    | Down -> (!pompier_y)<n && terrain.(!pompier_y+1).(!pompier_x).element != Eau && terrain.(!pompier_y+1).(!pompier_x).pompier = 0 && terrain.(!pompier_y+1).(!pompier_x).intensite_feu = 0
+    | Left -> (!pompier_x)>0 && terrain.(!pompier_y).(!pompier_x-1).element != Eau && terrain.(!pompier_y).(!pompier_x-1).pompier = 0 && terrain.(!pompier_y).(!pompier_x-1).intensite_feu = 0
+    | Right -> (!pompier_x)<m && terrain.(!pompier_y).(!pompier_x+1).element != Eau && terrain.(!pompier_y).(!pompier_x+1).pompier = 0 && terrain.(!pompier_y).(!pompier_x+1).intensite_feu = 0 in
+  
   if (terrain.(!pompier_y).(!pompier_x).pompier > 0 && terrain.(!pompier_y).(!pompier_x).pompier < 4 && possible) then
     begin
       let (i,j) =
@@ -150,10 +160,12 @@ let move_pompier dir =
 	  | Up ->  (!pompier_y-1,!pompier_x)
 	  | Down ->  (!pompier_y+1,!pompier_x)
 	  | Left -> (!pompier_y,!pompier_x-1)
-	  | Right -> (!pompier_y,!pompier_x+1) in
-	terrain.(i).(j).pompier <- terrain.(!pompier_y).(!pompier_x).pompier + 1;
-      	terrain.(!pompier_y).(!pompier_x).pompier <- 0;
+	  | Right -> (!pompier_y,!pompier_x+1)
+      in
+      terrain.(i).(j).pompier <- terrain.(!pompier_y).(!pompier_x).pompier + 1;
+      terrain.(!pompier_y).(!pompier_x).pompier <- 0;
       dessine_case (!pompier_y) (!pompier_x);
+      actualise_pompier (!pompier_x) (!pompier_y) i j;
       pompier_x := j;
       pompier_y := i;
       dessine_case (i) (j);
