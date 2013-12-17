@@ -83,6 +83,7 @@ let explosion carte k l =
     |SE -> (2,2) in
   for i=0 to n-1 do
     for j=0 to m-1 do
+      if carte.(i).(j).element <> Eau then
       if ((abs (i+coeffx-k) + abs (j+coeffy-l)) < 6) then
 	(carte.(i).(j).intensite_feu <- 0;
 	  carte.(i).(j).calcine <- true);
