@@ -34,6 +34,11 @@ let allumer_feu case =
     end
 ;;
 
+let eteindre_feu case =
+  case.estompe <- false;
+  case.intensite_feu <- 0;
+  case.brule <- false;;
+
 let maj_feu case i = (*i=1 pour augmenter feu; i=2 pour diminuer feu*)
   if (case.pompier = 0 && not(case.calcine)) then
     begin
@@ -66,6 +71,24 @@ let maj_feu case i = (*i=1 pour augmenter feu; i=2 pour diminuer feu*)
     end
 ;;
 
+let explosion carte k l =
+  let (coeffx,coeffy) = match wind_direction with
+    |Haut -> (0,-2) 
+    |Bas -> (0,2)
+    |Gauche -> (-2,0)
+    |Droite -> (2,0)
+    |NO -> (-2,-2)
+    |NE -> (2,-2)
+    |SO -> (-2,2)
+    |SE -> (2,2) in
+  for i=0 to n-1 do
+    for j=0 to m-1 do
+      if ((abs (i+coeffx-k) + abs (j+coeffy-l)) < 6) then
+	(carte.(i).(j).intensite_feu <- 0;
+	  carte.(i).(j).calcine <- true);
+    done;
+  done;;
+      
 let clone case = {element = case.element; intensite_feu = case.intensite_feu; estompe = case.estompe; calcine = case.calcine; brule = case.brule; pompier = case.pompier};;
 
 let coeff_vent i =
@@ -191,7 +214,11 @@ let unite_temps foudre =
       if (terrain.(i).(j).intensite_feu > 0) then feu:=true;
       
       if (!pompier_a_cote) then maj_feu new_terrain.(i).(j) 2
-      else if (!feu) then maj_feu new_terrain.(i).(j) 1
+      else if (!feu) then
+	if new_terrain.(i).(j).element = Centrale then
+	  explosion new_terrain i j
+	else
+	  maj_feu new_terrain.(i).(j) 1;
     done;
   done;
   
@@ -214,5 +241,7 @@ let unite_temps foudre =
 	allumer_feu terrain.(!i_foudre).(!j_foudre);
 	dessine_foudre (!i_foudre) (!j_foudre);
       end;;
+
+
 
 
