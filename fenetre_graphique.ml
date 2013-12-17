@@ -14,7 +14,7 @@ let offset = 10;;
 
 let taille_case = 20;; 
 let largeur_raccourcis = 200;;
-let hauteur_raccourcis = 200;;
+let hauteur_raccourcis = 220;;
 
 let cote =
   let taille_x = min (max_x-3*offset-largeur_raccourcis-50) (m*taille_case) in
@@ -119,21 +119,23 @@ let dessine_raccourcis () =
   moveto debut_gauche (debut_haut-2*ecart);
   draw_string "'f' : selectionner feu";
   moveto debut_gauche (debut_haut-3*ecart);
-  draw_string "'c' : fermer la fenetre";
+  draw_string "'l' : charger un terrain";
   moveto debut_gauche (debut_haut-4*ecart);
+  draw_string "'c' : fermer la fenetre";
+  moveto debut_gauche (debut_haut-5*ecart);
   draw_string "'SPACE' : passer au tour suivant";
-  moveto (debut_gauche+20) (debut_haut-6*ecart);
+  moveto (debut_gauche+20) (debut_haut-7*ecart);
   draw_string "Donnees :";
-  moveto debut_gauche (debut_haut-7*ecart);
-  draw_string "0 pompier disponible";
   moveto debut_gauche (debut_haut-8*ecart);
+  draw_string "0 pompier disponible";
+  moveto debut_gauche (debut_haut-9*ecart);
   draw_string "Tour 1";
 ;;
 
 let actualiser_nombre_pompiers () =
   let debut_gauche = 2*offset + taille_x in
   let ecart = 20 in
-  let debut_haut = size_y()-2*offset-7*ecart in
+  let debut_haut = size_y()-2*offset-8*ecart in
 
   set_color white;
   fill_rect debut_gauche debut_haut (offset+largeur_raccourcis) (ecart/2);
@@ -148,7 +150,7 @@ let actualiser_nombre_pompiers () =
 let actualiser_tour () =
   let debut_gauche = 2*offset + taille_x in
   let ecart = 20 in
-  let debut_haut = size_y()-2*offset-8*ecart in
+  let debut_haut = size_y()-2*offset-9*ecart in
 
   set_color white;
   fill_rect debut_gauche debut_haut (offset+largeur_raccourcis) (ecart/2);
