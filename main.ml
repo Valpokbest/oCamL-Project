@@ -22,7 +22,7 @@ let main () =
   
   while (not(!fin)) do
     if (thunder && !compteur_tour = 0 && (Random.float 1.) < prob_foudre) then foudre := true;
-    let stat = wait_next_event [Button_down;Key_pressed] in
+    let stat = wait_next_event [Button_down; Key_pressed] in
     let x = stat.mouse_x in
     let y = stat.mouse_y in
     
@@ -40,7 +40,7 @@ let main () =
 	| 'd' -> move_pompier Right
 	| 's' -> move_pompier Down
 	| 'w' -> action_souris := Water
-	| 'f' -> action_souris := Feu;
+	| 'f' -> action_souris := Feu
 	| _ -> () 
 
     else
@@ -58,7 +58,10 @@ let main () =
 	  	if (case.intensite_feu = 0 && case.element != Eau) then
 	  	begin
 	  	if (!compteur_pompiers > 0 && case.pompier = 0) then
-	    	(case.pompier <- 1; decr(compteur_pompiers); actualiser_nombre_pompiers());
+		  begin
+	    	    case.pompier <- 1; decr(compteur_pompiers); actualiser_nombre_pompiers();
+		    liste_pompiers := (i,j)::(!liste_pompiers);
+		  end;
 	    	dessine_case i j; pompier_x := j; pompier_y := i
 	    	end;
 
