@@ -1,9 +1,10 @@
-(*#load "graphics.cma";;
+(*load "graphics.cma";;
 #load "types_et_donnees.cmo";;
 #load "generation_de_terrains.cmo";; 
 #load "fenetre_graphique.cmo";;
 #load "calculs.cmo";;
-#load "files.cmo";;*)
+#load "files.cmo";;
+#load "ia.cmo";;*)
 (* à décommenter si non compilé *)
 
 open Graphics;;
@@ -12,6 +13,7 @@ open Generation_de_terrains;;
 open Fenetre_graphique;;
 open Calculs;;
 open Files;;
+open Ia;;
 
 let main () =
   ouvrir();
@@ -41,6 +43,7 @@ let main () =
 	| 's' -> move_pompier Down
 	| 'w' -> action_souris := Water
 	| 'f' -> action_souris := Feu
+	| 'm' -> action_ia_fonce ()
 	| _ -> () 
 
     else
@@ -60,7 +63,7 @@ let main () =
 	  	if (!compteur_pompiers > 0 && case.pompier = 0) then
 		  begin
 	    	    case.pompier <- 1; decr(compteur_pompiers); actualiser_nombre_pompiers();
-		    liste_pompiers := (i,j)::(!liste_pompiers);
+		    liste_pompiers := (j,i)::(!liste_pompiers);
 		  end;
 	    	dessine_case i j; pompier_x := j; pompier_y := i
 	    	end;
