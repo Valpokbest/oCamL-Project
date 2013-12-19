@@ -165,7 +165,7 @@ let move_pompier dir =
       terrain.(i).(j).pompier <- terrain.(!pompier_y).(!pompier_x).pompier + 1;
       terrain.(!pompier_y).(!pompier_x).pompier <- 0;
       dessine_case (!pompier_y) (!pompier_x);
-      actualise_pompier (!pompier_x) (!pompier_y) i j;
+      actualise_pompier (!pompier_x) (!pompier_y) j i;
       pompier_x := j;
       pompier_y := i;
       dessine_case (i) (j);
