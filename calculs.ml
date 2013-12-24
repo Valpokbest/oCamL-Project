@@ -18,6 +18,7 @@ let score () =
       if (not(case.calcine)) then
 	match case.element with
 	  | Eau -> ()
+	  | Centrale -> score := !score + 5
 	  | Plaine -> score := !score + 1
 	  | Foret -> score := !score + 2
 	  | Maison -> score := !score + 3;
