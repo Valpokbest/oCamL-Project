@@ -55,19 +55,23 @@ let charger num =
 				|"01" -> Foret
 				|"02" -> Plaine
 				|"03" -> Maison
-				|"04" -> Centrale) in
+				|"04" -> Centrale
+				|_ -> Eau) in
 			let case = init_case(elt) in
 			case.intensite_feu <- int_of_string(String.make 1 (input_char fichier));
 			let c = input_char fichier in
 			case.calcine <- (match c with
 				|'0' -> false
-				|'1' -> true);
+				|'1' -> true
+				|_ -> false);
 			case.estompe <- (match (input_char fichier) with
 				|'0' -> false
-				|'1' -> true);
+				|'1' -> true
+				|_ -> false);
 			case.brule <- (match (input_char fichier) with
 				|'0' -> false
-				|'1' -> true);
+				|'1' -> true
+				|_ -> false);
 			case.pompier <- int_of_string(String.make 1 (input_char fichier));
 			let vider_ligne = input_line fichier in
 			terrain.(i).(j) <- case;
