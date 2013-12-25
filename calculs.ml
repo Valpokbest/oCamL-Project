@@ -73,7 +73,7 @@ let maj_feu case i = (*i=1 pour augmenter feu; i=2 pour diminuer feu*)
 ;;
 
 let explosion carte k l =
-  let (coeffx,coeffy) = match wind_direction with
+  let (coeffx,coeffy) = match !wind_direction with
     |Haut -> (0,-2) 
     |Bas -> (0,2)
     |Gauche -> (-2,0)
@@ -93,7 +93,7 @@ let explosion carte k l =
 let clone case = {element = case.element; intensite_feu = case.intensite_feu; estompe = case.estompe; calcine = case.calcine; brule = case.brule; pompier = case.pompier};;
 
 let coeff_vent i =
-  match wind_direction with
+  match !wind_direction with
 	| Haut -> if (i < 4) then 0.25 else if (i>6) then -1. else 0.
 	| Bas -> if (i > 6) then 0.25 else if (i < 4) then -1. else 0.
 	| Gauche -> if ((i mod 3) = 1) then 0.25 else if ((i mod 3) = 0) then -1. else 0.
@@ -171,6 +171,32 @@ let move_pompier dir =
       pompier_y := i;
       dessine_case (i) (j);
     end;;
+	
+let changer_direction_vent () =
+	let num_vent = ref (match !wind_direction with
+		| Haut -> 0
+		| Bas -> 4
+		|Gauche -> 2
+		|Droite -> 6
+		|SO -> 3
+		|NO -> 1
+		|SE -> 5
+		|NE -> 7) in
+	let random = Random.int 3 in
+	if (random = 0) then incr(num_vent)
+	else if (random = 1) then decr(num_vent);
+	num_vent := !num_vent mod 8;
+	wind_direction := (match !num_vent with
+	|0-> Haut
+	|4->Bas
+	|2->Gauche
+	|6->Droite
+	|3->SO
+	|1->NO
+	|5->SE
+	|7->NE
+	|_->Haut);;
+		
 
 let unite_temps foudre =
   let n = Array.length terrain in
@@ -242,6 +268,9 @@ let unite_temps foudre =
     done;
   done;
   
+  changer_direction_vent ();
+  actualiser_vent ();
+  
   if (foudre) then
     if not(tout_en_feu()) then
       begin
@@ -255,7 +284,3 @@ let unite_temps foudre =
 	allumer_feu terrain.(!i_foudre).(!j_foudre);
 	dessine_foudre (!i_foudre) (!j_foudre);
       end;;
-
-
-
-
