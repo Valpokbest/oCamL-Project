@@ -26,7 +26,7 @@ let prob_foudre = 0.5;;
 (* Variables globales pour la simulation *)
 let advanced_simulation = true;;
 let wind = true;;
-let wind_direction = SO;;
+let wind_direction = ref SO;;
 let rain = false;;
 let thunder = true;;
 
