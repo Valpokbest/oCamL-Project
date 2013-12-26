@@ -40,62 +40,87 @@ let action_ia_fonce () =
           end;
       done;
     done;
-	(*print_int(!pompier_x);
+	print_int(!objectifx);
+	print_newline();
+	print_int(!objectify);
+	print_newline();
+	print_int(!pompier_x);
 	print_newline();
 	print_int(!pompier_y);
-	print_newline();*)
+	print_newline();
+	print_newline();
 	let coince = ref (!objectifx = 0 || !objectify = 0) in
     while (terrain.(!pompier_y).(!pompier_x).pompier < 4 && not(!coince)) do
     if abs(!objectifx- !pompier_x) > abs(!objectify - !pompier_y) then
+	  begin
       if !objectifx - !pompier_x > 0 then
+		begin
 		if (not(collision(!pompier_y,!pompier_x+1))) then
 			move_pompier Right
 		else
 			if !objectify - !pompier_y > 0 then
-				(if (not(collision(!pompier_y+1,!pompier_x))) then
-					move_pompier Down)
+				if (not(collision(!pompier_y+1,!pompier_x))) then
+					move_pompier Down
+				else 
+					coince:=true
 			else
 				if (not(collision(!pompier_y-1,!pompier_x))) then
 					move_pompier Up
 				else
 					coince:=true
+		end
       else
+		begin
 		if (not(collision(!pompier_y,!pompier_x-1))) then
 			move_pompier Left
 		else
 			if !objectify - !pompier_y > 0 then
-				(if (not(collision(!pompier_y+1,!pompier_x))) then
-					move_pompier Down)
+				if (not(collision(!pompier_y+1,!pompier_x))) then
+					move_pompier Down
+				else 
+					coince:=true
 			else
 				if (not(collision(!pompier_y-1,!pompier_x))) then
 					move_pompier Up
 				else
 					coince:=true
+		end
+	  end
     else
+	  begin
       if !objectify - !pompier_y > 0 then
+		begin
         if (not(collision(!pompier_y+1,!pompier_x))) then
 			move_pompier Down
 		else
 			if !objectifx - !pompier_x > 0 then
-				(if (not(collision(!pompier_y,!pompier_x+1))) then
-					move_pompier Right)
+				if (not(collision(!pompier_y,!pompier_x+1))) then
+					move_pompier Right
+				else 
+					coince:=true
 			else
 				if (not(collision(!pompier_y,!pompier_x-1))) then
 					move_pompier Left
 				else
 					coince:=true
+		end
       else
+		begin
         if (not(collision(!pompier_y-1,!pompier_x))) then
 			move_pompier Up
 		else
 			if !objectifx - !pompier_x > 0 then
-				(if (not(collision(!pompier_y,!pompier_x+1))) then
-					move_pompier Right)
+				if (not(collision(!pompier_y,!pompier_x+1))) then
+					move_pompier Right
+				else 
+					coince:=true	
 			else
 				if (not(collision(!pompier_y,!pompier_x-1))) then
 					move_pompier Left
 				else
-					coince:=true;
+					coince:=true
+		end
+	  end;
 	done;
 	(!pompier_x, !pompier_y)
   in
@@ -106,4 +131,3 @@ let action_ia_fonce () =
   in
 
 liste_pompiers := deplacer_pompiers liste;;
-
