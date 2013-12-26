@@ -1,4 +1,4 @@
-(*load "graphics.cma";;
+(*#load "graphics.cma";;
 #load "types_et_donnees.cmo";;
 #load "generation_de_terrains.cmo";; 
 #load "fenetre_graphique.cmo";;
@@ -22,12 +22,27 @@ let main () =
   let fin = ref false in
   let foudre = ref false in
   
+let rec ia_fonce () =
+	if !compteur_tour < 100 then
+	begin
+		unite_temps (!foudre);
+		incr(compteur_tour); 
+		actualiser_tour();
+		action_ia_fonce ();
+		dessine();
+		(*if (!compteur_tour mod 10 = 0) then poser_pompier ();*)
+		Unix.sleep(2);
+		ia_fonce ();
+	end
+	else 
+		fin:=true in
+
   while (not(!fin)) do
     if (thunder && !compteur_tour = 0 && (Random.float 1.) < prob_foudre) then foudre := true;
     let stat = wait_next_event [Button_down; Key_pressed] in
     let x = stat.mouse_x in
     let y = stat.mouse_y in
-    
+	
     if stat.keypressed then
       match stat.key with
 	| ' '  -> unite_temps (!foudre); incr(compteur_tour); actualiser_tour();
@@ -43,7 +58,7 @@ let main () =
 	| 's' -> move_pompier Down
 	| 'w' -> action_souris := Water
 	| 'f' -> action_souris := Feu
-	| 'm' -> action_ia_fonce ()
+	| 'm' -> ia_fonce ()
 	| _ -> () 
 
     else
@@ -70,6 +85,9 @@ let main () =
 
 	) with _ -> ()
       end;
+	  
+	
+	  
     foudre := false;
   done;
 ;;
