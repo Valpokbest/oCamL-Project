@@ -84,9 +84,13 @@ let explosion carte k l =
     |SE -> (2,2) in
   for i=0 to n-1 do
     for j=0 to m-1 do
-      if ((abs (i+coeffx-k) + abs (j+coeffy-l)) < 6) then
+      if ((abs (i+coeffx-k) + abs (j+coeffy-l)) < 5) then
 	(carte.(i).(j).intensite_feu <- 0;
-	  carte.(i).(j).calcine <- true);
+	  carte.(i).(j).calcine <- true;
+	  carte.(i).(j).pompier <- 0;
+	  (*PENSER A SUPPRIMER LE POMPIER DE LA LISTE*))
+	  else if ((abs (i+coeffx-k) + abs (j+coeffy-l)) = 5) then
+	(allumer_feu carte.(i).(j));
     done;
   done;;
       
