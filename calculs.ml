@@ -25,6 +25,30 @@ let score () =
     done;
   done;
   !score;;
+  
+let score_max = score ();;
+
+let actualise_pompier x y k l =
+  let liste = !liste_pompiers in
+
+  let rec aux = function
+    | [] -> []
+    | t::q when t = (x,y) -> (k,l)::q
+    | t::q -> t::(aux q)
+  in
+
+liste_pompiers := aux liste;;
+
+let supprimer_pompier x y =
+  let liste = !liste_pompiers in
+
+  let rec aux = function
+    | [] -> []
+    | t::q when t = (x,y) -> q
+    | t::q -> t::(aux q)
+  in
+
+liste_pompiers := aux liste;;
 
 let allumer_feu case =
   if not(case.calcine) then
@@ -74,6 +98,7 @@ let maj_feu case i = (*i=1 pour augmenter feu; i=2 pour diminuer feu*)
 
 let explosion carte k l =
   let (coeffx,coeffy) = match !wind_direction with
+  |_ -> (0,0)
     |Haut -> (0,-2) 
     |Bas -> (0,2)
     |Gauche -> (-2,0)
@@ -84,13 +109,17 @@ let explosion carte k l =
     |SE -> (2,2) in
   for i=0 to n-1 do
     for j=0 to m-1 do
+	if (carte.(i).(j).element <> Eau) then
       if ((abs (i+coeffx-k) + abs (j+coeffy-l)) < 5) then
 	(carte.(i).(j).intensite_feu <- 0;
 	  carte.(i).(j).calcine <- true;
 	  carte.(i).(j).pompier <- 0;
-	  (*PENSER A SUPPRIMER LE POMPIER DE LA LISTE*))
+	  supprimer_pompier j i)
 	  else if ((abs (i+coeffx-k) + abs (j+coeffy-l)) = 5) then
-	(allumer_feu carte.(i).(j));
+	(allumer_feu carte.(i).(j);
+	carte.(i).(j).pompier <- 0;
+	  supprimer_pompier j i);
+	
     done;
   done;;
       
@@ -140,18 +169,10 @@ let tout_en_feu () =
   
   !check;;
 
-let actualise_pompier i j k l =
-  let liste = !liste_pompiers in
-
-  let rec aux = function
-    | [] -> []
-    | t::q when t = (i,j) -> (k,l)::q
-    | t::q -> t::(aux q)
-  in
-
-liste_pompiers := aux liste;;
 
 let move_pompier dir =
+	print_string("move_pompier()");
+	print_newline();
   let possible = match dir with
     | Up -> (!pompier_y)>0 && terrain.(!pompier_y-1).(!pompier_x).element != Eau && terrain.(!pompier_y-1).(!pompier_x).pompier = 0 && terrain.(!pompier_y-1).(!pompier_x).intensite_feu = 0
     | Down -> (!pompier_y)<n && terrain.(!pompier_y+1).(!pompier_x).element != Eau && terrain.(!pompier_y+1).(!pompier_x).pompier = 0 && terrain.(!pompier_y+1).(!pompier_x).intensite_feu = 0
@@ -203,6 +224,8 @@ let changer_direction_vent () =
 		
 
 let unite_temps foudre =
+	print_string("unite_temps()");
+	print_newline();
   let n = Array.length terrain in
   let m = Array.length terrain.(0) in
   let new_terrain = Array.make_matrix n m (init_case(Foret)) in
@@ -288,3 +311,4 @@ let unite_temps foudre =
 	allumer_feu terrain.(!i_foudre).(!j_foudre);
 	dessine_foudre (!i_foudre) (!j_foudre);
       end;;
+
