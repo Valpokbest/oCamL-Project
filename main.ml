@@ -1,5 +1,3 @@
-(*#load "graphics.cma";;
-#load "types_et_donnees.cmo";;
 #load "generation_de_terrains.cmo";; 
 #load "fenetre_graphique.cmo";;
 #load "calculs.cmo";;
@@ -23,19 +21,22 @@ let main () =
   let foudre = ref false in
   
 let rec ia_fonce () =
-	if !compteur_tour < 100 then
+	if (objectif 0 0) <> (-1,-1) then
 	begin
 		unite_temps (!foudre);
 		incr(compteur_tour); 
 		actualiser_tour();
 		action_ia_fonce ();
 		dessine();
-		(*if (!compteur_tour mod 10 = 0) then poser_pompier ();*)
-		Unix.sleep(2);
+		if (!compteur_tour mod 10 = 0) then poser_pompier ();
+		Unix.sleep(1);
 		ia_fonce ();
 	end
 	else 
-		fin:=true in
+		(print_int (score ());
+		 print_string ("\\");
+		 print_int score_max;
+		 fin:=true) in
 
   while (not(!fin)) do
     if (thunder && !compteur_tour = 0 && (Random.float 1.) < prob_foudre) then foudre := true;
