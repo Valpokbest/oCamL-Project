@@ -34,8 +34,8 @@ let rec ia_fonce () =
 	end
 	else 
 		(print_int (score ());
-		 print_string ("\\");
-		 print_int score_max;
+		 print_string ("/");
+		 print_int (score_max ());
 		 fin:=true) in
 
   while (not(!fin)) do
