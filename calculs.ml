@@ -26,7 +26,20 @@ let score () =
   done;
   !score;;
   
-let score_max = score ();;
+let score_max () = 
+  let score = ref 0 in
+  for i=0 to n-1 do
+    for j=0 to m-1 do
+      let case = terrain.(i).(j) in
+	match case.element with
+	  | Eau -> ()
+	  | Centrale -> score := !score + 5
+	  | Plaine -> score := !score + 1
+	  | Foret -> score := !score + 2
+	  | Maison -> score := !score + 3;
+    done;
+  done;
+  !score;;
 
 let actualise_pompier x y k l =
   let liste = !liste_pompiers in
