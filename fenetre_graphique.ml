@@ -141,7 +141,7 @@ let dessine_raccourcis () =
   moveto debut_gauche (debut_haut-10*ecart);
   draw_string "Tour 1";
   moveto debut_gauche (debut_haut-11*ecart);
-  if wind then draw_string ("Direction du vent : "^string_of_dir !wind_direction)
+  if !wind then draw_string ("Direction du vent : "^string_of_dir !wind_direction)
   else draw_string "Pas de vent";
   moveto debut_gauche (debut_haut-12*ecart);
   if rain then draw_string "Pluie"
@@ -186,7 +186,7 @@ let actualiser_vent () =
   set_color black;
   moveto debut_gauche debut_haut;
   
-  if wind then draw_string ("Direction du vent : "^string_of_dir !wind_direction)
+  if !wind then draw_string ("Direction du vent : "^string_of_dir !wind_direction)
   else draw_string "Pas de vent";
 ;;
 
