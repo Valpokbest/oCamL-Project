@@ -1,9 +1,9 @@
-#load "generation_de_terrains.cmo";; 
+(* #load "generation_de_terrains.cmo";; 
 #load "fenetre_graphique.cmo";;
 #load "calculs.cmo";;
 #load "files.cmo";;
 #load "ia.cmo";;*)
-(* à décommenter si non compilé *)
+(* Ã  dÃ©commenter si non compilÃ© *)
 
 open Graphics;;
 open Types_et_donnees;;
@@ -43,7 +43,7 @@ let rec ia_fonce () =
     let stat = wait_next_event [Button_down; Key_pressed] in
     let x = stat.mouse_x in
     let y = stat.mouse_y in
-	
+
     if stat.keypressed then
       match stat.key with
 	| ' '  -> unite_temps (!foudre); incr(compteur_tour); actualiser_tour();
@@ -87,7 +87,7 @@ let rec ia_fonce () =
 	) with _ -> ()
       end;
 	  
-	
+
 	  
     foudre := false;
   done;
