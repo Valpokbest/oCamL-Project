@@ -106,3 +106,33 @@ let initialiser_terrain n m =
 t;;
 
 let terrain = initialiser_terrain n m;;
+
+let allumer_terrain p =
+(* Allume p cases du terrains *)
+  let k = ref p in
+  let compteur = ref 0 in (* vérif qu'on ne boucle pas à l'infini *)
+
+  while (!k > 0 && !compteur < n*m*10) do
+    let i = Random.int n in
+    let j = Random.int m in
+    let c = terrain.(i).(j) in
+
+    if c.intensite_feu = 0 && c.element <> Eau then (c.intensite_feu <- 1; decr k);
+    incr compteur;
+  done;
+;;
+
+let reinitialiser_terrain () =
+  for i = 0 to (n-1) do
+    for j = 0 to (m-1) do
+      let c = terrain.(i).(j) in
+      c.intensite_feu <- 0;
+      c.estompe <- false;
+      c.brule <- false;
+      c.calcine <- false;
+      c.pompier <- 0;
+    done;
+  done;;
+
+allumer_terrain quantite_feu;;
+
