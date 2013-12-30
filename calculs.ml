@@ -110,32 +110,23 @@ let maj_feu case i = (*i=1 pour augmenter feu; i=2 pour diminuer feu*)
 ;;
 
 let explosion carte k l =
-  let (coeffx,coeffy) = match !wind_direction with
-  |_ -> (0,0)
-    |Haut -> (0,-2) 
-    |Bas -> (0,2)
-    |Gauche -> (-2,0)
-    |Droite -> (2,0)
-    |NO -> (-2,-2)
-    |NE -> (2,-2)
-    |SO -> (-2,2)
-    |SE -> (2,2) in
+  let (coeffx,coeffy) = (0,0) in
   for i=0 to n-1 do
     for j=0 to m-1 do
-	if (carte.(i).(j).element <> Eau) then
-      if ((abs (i+coeffx-k) + abs (j+coeffy-l)) < 5) then
-	(carte.(i).(j).intensite_feu <- 0;
-	  carte.(i).(j).calcine <- true;
-	  carte.(i).(j).pompier <- 0;
-	  supprimer_pompier j i)
-	  else if ((abs (i+coeffx-k) + abs (j+coeffy-l)) = 5) then
-	(allumer_feu carte.(i).(j);
-	carte.(i).(j).pompier <- 0;
-	  supprimer_pompier j i);
-	
+      if (carte.(i).(j).element <> Eau) then
+	if ((abs (i+coeffx-k) + abs (j+coeffy-l)) < 5) then
+	  (carte.(i).(j).intensite_feu <- 0;
+	   carte.(i).(j).calcine <- true;
+	   carte.(i).(j).pompier <- 0;
+	   supprimer_pompier j i)
+	else if ((abs (i+coeffx-k) + abs (j+coeffy-l)) = 5) then
+	  (allumer_feu carte.(i).(j);
+	   carte.(i).(j).pompier <- 0;
+	   supprimer_pompier j i);
+      
     done;
   done;;
-      
+
 let clone case = {element = case.element; intensite_feu = case.intensite_feu; estompe = case.estompe; calcine = case.calcine; brule = case.brule; pompier = case.pompier};;
 
 let coeff_vent i =
@@ -182,10 +173,26 @@ let tout_en_feu () =
   
   !check;;
 
+let tout_eteint () =
+  let check = ref true in
+  let i = ref 0 in
+  let j = ref 0 in
+  
+  while (!i < n && !check) do
+    while (!j < m && !check) do
+      if (terrain.(!i).(!j).intensite_feu > 0) then check := false;
+      incr j
+    done;
+    j := 0;
+    incr i
+  done;
+  
+  !check;;
+
 
 let move_pompier dir =
-	print_string("move_pompier()");
-	print_newline();
+ (*print_string("move_pompier()");
+   print_newline();*)
   let possible = match dir with
     | Up -> (!pompier_y)>0 && terrain.(!pompier_y-1).(!pompier_x).element != Eau && terrain.(!pompier_y-1).(!pompier_x).pompier = 0 && terrain.(!pompier_y-1).(!pompier_x).intensite_feu = 0
     | Down -> (!pompier_y)<n && terrain.(!pompier_y+1).(!pompier_x).element != Eau && terrain.(!pompier_y+1).(!pompier_x).pompier = 0 && terrain.(!pompier_y+1).(!pompier_x).intensite_feu = 0
@@ -209,36 +216,34 @@ let move_pompier dir =
       pompier_y := i;
       dessine_case (i) (j);
     end;;
-	
+
 let changer_direction_vent () =
 	let num_vent = ref (match !wind_direction with
 		| Haut -> 0
 		| Bas -> 4
-		|Gauche -> 2
-		|Droite -> 6
-		|SO -> 3
-		|NO -> 1
-		|SE -> 5
-		|NE -> 7) in
-	let random = Random.int 3 in
+		| Gauche -> 2
+		| Droite -> 6
+		| SO -> 3
+		| NO -> 1
+		| SE -> 5
+		| NE -> 7) in
+	let random = Random.int 8 in
 	if (random = 0) then incr(num_vent)
 	else if (random = 1) then decr(num_vent);
 	num_vent := !num_vent mod 8;
 	wind_direction := (match !num_vent with
-	|0-> Haut
-	|4->Bas
-	|2->Gauche
-	|6->Droite
-	|3->SO
-	|1->NO
-	|5->SE
-	|7->NE
-	|_->Haut);;
-		
+	| 0 -> Haut
+	| 4 -> Bas
+	| 2 -> Gauche
+	| 6 -> Droite
+	| 3 -> SO
+	| 1 -> NO
+	| 5 -> SE
+	| 7 -> NE
+	| _ ->Haut);;
 
-let unite_temps foudre =
-	print_string("unite_temps()");
-	print_newline();
+
+let unite_temps () =
   let n = Array.length terrain in
   let m = Array.length terrain.(0) in
   let new_terrain = Array.make_matrix n m (init_case(Foret)) in
@@ -311,7 +316,7 @@ let unite_temps foudre =
   changer_direction_vent ();
   actualiser_vent ();
   
-  if (foudre) then
+  if (!foudre) then
     if not(tout_en_feu()) then
       begin
 	let i_foudre = ref (Random.int n) in
@@ -325,3 +330,31 @@ let unite_temps foudre =
 	dessine_foudre (!i_foudre) (!j_foudre);
       end;;
 
+let imprimer_retry () =
+  print_endline "Voulez-vous recommencer ? (y/N)";
+  match read_line() with
+    | "y" -> true
+    | _ -> false
+;;
+
+let recommencer_partie () =
+  if (imprimer_retry()) then
+    begin
+      reinitialiser_terrain();
+      allumer_terrain quantite_feu;
+      
+      foudre := false;
+      ia := false;
+      compteur_tour := 1;
+      action_souris := Pompier;
+      pompier_x := 0;
+      pompier_y := 0;
+      compteur_pompiers := 0;
+      liste_pompiers := [];
+      clear_graph();
+      dessine();
+      dessine_raccourcis();
+      false;
+    end
+  else true;
+;;
