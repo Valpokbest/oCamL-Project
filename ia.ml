@@ -10,7 +10,7 @@ open Fenetre_graphique;;
 open Calculs;;
 open Generation_de_terrains;;
 
-
+(*gestion des collisions*)
 let collision (i,j) =
   let retour = ref false in
   if i<0 || j<0 || i>n || j>m then retour := true;
@@ -31,7 +31,7 @@ let rec poser_pompier () =
 	let max = ref 0 and i = ref 0 and j = ref 0 in
 	for i1=0 to n-1 do
 	  for j1=0 to m-1 do
-	    if (not(collision (i1,j1))) then
+	    if (not(collision (i1,j1))) then (*si c'est une case potentielle pour accueillir le pompier*)
 	      begin
 		let homogene = ref 0 in
 		if (i1>0) then
@@ -62,19 +62,19 @@ let rec poser_pompier () =
 		if (i1>0) then
 		  if (terrain.(i1-1).(j1).intensite_feu > 0) then
 		    incr(homogene);
-		if (!homogene > !max) then
+		if (!homogene > !max) then (*on a calculé le nb de cases en feu voisines*)
 		  begin
 		    max:=!homogene;
 		    i:=i1;
 		    j:=j1;
-		  end
+		  end (* le maximum est retenu*)
 	      end;
 	  done;
 	done;
-	liste_pompiers := (!j,!i)::(!liste_pompiers);
+	liste_pompiers := (!j,!i)::(!liste_pompiers); (*on ajoute le pompier a la liste*)
 	decr compteur_pompiers;
 	actualiser_nombre_pompiers ();
-	terrain.(!i).(!j).pompier <- 1;
+	terrain.(!i).(!j).pompier <- 1; (*et au terrain*)
 	dessine_case (!i) (!j);
 	poser_pompier ();
       end;
@@ -82,7 +82,7 @@ let rec poser_pompier () =
     end
 ;;
 
-
+(*fonction pour calculer la case en feu la plus proche du pompier en (x,y)*)
 let objectif x y =
   (*print_string("objectif()");
   print_newline();*)
@@ -92,7 +92,7 @@ let objectif x y =
     for j=0 to m-1 do
       if (terrain.(i).(j).intensite_feu > 0) then
         begin
-          let d = (abs (j-x)+abs (i-y)) in
+          let d = (abs (j-x)+abs (i-y)) in (*calcule de la distance*)
           if d < !distance_min then
             begin
               objectifx := j;
@@ -125,9 +125,9 @@ let action_ia_fonce () =
 	  print_int(!pompier_y);
 	  print_newline();
 	  print_newline();*)
-    let coince = ref (objectifx = (-1) || objectify = (-1)) in
+    let coince = ref (objectifx = (-1) || objectify = (-1)) in (*pas de case en feu*)
     while (terrain.(!pompier_y).(!pompier_x).pompier < 4 && not(!coince)) do
-      if abs(objectifx- !pompier_x) > abs(objectify - !pompier_y) then
+      if abs(objectifx- !pompier_x) > abs(objectify - !pompier_y) then (*déplacement selon x*)
 	begin
 	  if objectifx - !pompier_x > 0 then
 	    begin
@@ -170,7 +170,7 @@ let action_ia_fonce () =
 		end
 	    end
 	end
-      else
+      else (*déplacement selon y*)
 	begin
 	  if objectify - !pompier_y > 0 then
 	    begin
@@ -217,7 +217,7 @@ let action_ia_fonce () =
     (!pompier_x, !pompier_y)
   in
   
-  let rec deplacer_pompiers = function
+  let rec deplacer_pompiers = function (*on applique le déplacement à tous les pompiers*)
     | [] -> []
     | t::q -> 
     (*  print_string("deplacer_pompiers()");
