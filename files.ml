@@ -48,6 +48,7 @@ let charger num =
   let cp = int_of_string(input_line fichier) in
   let nb_rows = int_of_string(input_line fichier) in
   let nb_cols = int_of_string(input_line fichier) in
+  liste_pompiers := [];
 
   if (nb_rows = n && nb_cols = m) then (*on vérifie que le terrain est de la même taille que celui chargé*)
     begin
@@ -82,7 +83,9 @@ let charger num =
 	    | '0' -> false
 	    | '1' -> true
 	    | _ -> false);
-	  case.pompier <- int_of_string(String.make 1 (input_char fichier));
+	  let pompier = int_of_string(String.make 1 (input_char fichier)) in
+	  case.pompier <- pompier;
+	  if (pompier > 0) then liste_pompiers := (j,i)::(!liste_pompiers); (*toujours gérer la double structure sur les pompiers*)
 	  let _ = input_line fichier in
 	  terrain.(i).(j) <- case;
 	done;
