@@ -106,12 +106,63 @@ let maj_feu case i = (*i=1 pour augmenter feu; i=2 pour diminuer feu*)
 	end
       else if (i=2) then
 	begin
-	  case.intensite_feu <- case.intensite_feu-2;
-	  if (case.intensite_feu < 0) then case.intensite_feu <- 0;
-	  if (case.brule && case.intensite_feu = 0) then case.calcine <- true;
+		if (!super_pompier) then eteindre_feu case
+	  else begin
+		case.intensite_feu <- case.intensite_feu-2;
+		if (case.intensite_feu < 0) then case.intensite_feu <- 0;
+		if (case.brule && case.intensite_feu = 0) then case.calcine <- true;
+	  end
 	end
     end
 ;;
+
+(*fonction pour éviter de dédoubler les cases dans la liste du nuage*)
+let rec add_nuage l x y = match l with
+|[] -> [(x,y)]
+|a::q when a=(x,y) -> a::q
+|a::q -> a::(add_nuage q x y);;
+
+(*mise à jour des coordonnées des cases quand le nuage bouge!*)
+let rec deplacer_nuage l = match l with
+|[] -> []
+|(x,y)::q -> match !wind_direction with
+	|Haut -> if y>0 then (x,y-1)::(deplacer_nuage q) else deplacer_nuage q (*si on sort du terrain, le nuage disparaît*)
+	|Bas -> if y<n-1 then (x,y+1)::(deplacer_nuage q) else deplacer_nuage q
+	|Gauche -> if x>0 then (x-1,y)::(deplacer_nuage q) else deplacer_nuage q
+	|Droite -> if x<m-1 then (x+1,y)::(deplacer_nuage q) else deplacer_nuage q
+	|NO -> if y>0 && x>0 then (x-1,y-1)::(deplacer_nuage q) else deplacer_nuage q
+	|NE -> if y>0 && x<m-1 then (x+1,y-1)::(deplacer_nuage q) else deplacer_nuage q
+	|SE -> if y<n-1 && x<m-1 then (x+1,y+1)::(deplacer_nuage q) else deplacer_nuage q
+	|SO -> if y<n-1 && x>0 then (x-1,y+1)::(deplacer_nuage q) else deplacer_nuage q;;
+	
+(*Fonction de debug*)
+let rec afficher_nuage l = match l with
+|[] -> ()
+|(x,y)::q -> print_string("("); print_int(x); print_string(","); print_int(y); print_string(")"); print_newline();;
+	
+(*Contamination*)
+let rec contaminer l = match l with
+|[] -> ()
+|(x,y)::q -> if terrain.(y).(x).element = Foret || terrain.(y).(x).element = Plaine || terrain.(y).(x).element = Maison then	
+				terrain.(y).(x).contamine <- true;
+			contaminer q;; (*on passe aux autres cases du nuage*)
+				
+(*Pour enlever la vie aux pompiers s'il sont sur des cases contaminées*)
+let rec maladie l = match l with
+	|[] -> ()
+	|(x,y)::q -> if (terrain.(y).(x).pompier > 0 && terrain.(y).(x).contamine) then (*vérification*)
+			begin
+				terrain.(y).(x).pv <- terrain.(y).(x).pv-1;
+				if (terrain.(y).(x).pv = 0) then
+					begin
+						terrain.(y).(x).pompier <- 0;
+						supprimer_pompier x y;
+						dessine_case y x;
+					end;
+			end;
+			maladie q;;
+
+
 
 (*fonction pour gérer l'explosion d'une centrale nucléaire*)
 let explosion carte k l =
@@ -123,17 +174,19 @@ let explosion carte k l =
 	  (carte.(i).(j).intensite_feu <- 0;
 	   carte.(i).(j).calcine <- true;
 	   carte.(i).(j).pompier <- 0;	(*on supprime les pompiers morts de la carte*)
-	   supprimer_pompier j i) 		(*et de la liste*)
+	   supprimer_pompier j i;	(*et de la liste*)
+	   nuage := add_nuage (!nuage) j i)
 	else if ((abs (i+coeffx-k) + abs (j+coeffy-l)) = 5) then
 	  (allumer_feu carte.(i).(j);
 	   carte.(i).(j).pompier <- 0;
-	   supprimer_pompier j i);
+	   supprimer_pompier j i;
+	   nuage := add_nuage (!nuage) j i);
       
     done;
   done;;
 
 (*crée une nouvelle case avec les mêmes valeurs*)
-let clone case = {element = case.element; intensite_feu = case.intensite_feu; estompe = case.estompe; calcine = case.calcine; brule = case.brule; pompier = case.pompier};;
+let clone case = {element = case.element; contamine = case.contamine; intensite_feu = case.intensite_feu; estompe = case.estompe; calcine = case.calcine; brule = case.brule; pompier = case.pompier; pv = case.pv};;
 
 (*calcule le coefficient du au vent pour la simulation*)
 (*i est le numéro de la case voisine selon ce schéma:
@@ -223,6 +276,7 @@ let move_pompier dir =
 	  | Right -> (!pompier_y,!pompier_x+1)
       in
       terrain.(i).(j).pompier <- terrain.(!pompier_y).(!pompier_x).pompier + 1;
+	  terrain.(i).(j).pv <- terrain.(!pompier_y).(!pompier_x).pv;
       terrain.(!pompier_y).(!pompier_x).pompier <- 0; (*on déplace le pompier*)
       dessine_case (!pompier_y) (!pompier_x);
       actualise_pompier (!pompier_x) (!pompier_y) j i; (*on stocke les coords dans la liste sous la forme (x,y)*)
