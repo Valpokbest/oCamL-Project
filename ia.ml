@@ -159,7 +159,7 @@ let action_ia_fonce () =
     pompier_x := x;
     pompier_y := y;
     
-    let (objectifx,objectify) = (match ia_num with
+    let (objectifx,objectify) = (match num_ia with
 	|2 -> objectif_score x y
 	|3 -> objectif_feu x y
 	|_ -> objectif x y) in
