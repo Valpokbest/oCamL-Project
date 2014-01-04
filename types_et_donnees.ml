@@ -77,6 +77,12 @@ let thunder = ( match read_line() with
     | _ -> false);;
 
 
+print_endline "Choisissez une IA (1,2,3).";;
+let num_ia = ( match read_int() with
+|2 -> 2
+|3 -> 3
+|_ -> 1);;
+
 let advanced_simulation =
   print_endline "Voulez-vous lancer la simulation avancee (a) ou simple (s) ? (A/s)";
   match read_line() with
