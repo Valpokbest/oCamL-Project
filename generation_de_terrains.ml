@@ -8,7 +8,7 @@ Random.self_init();;
 
 (*une case par défaut avec un type de terrain*)
 let init_case (elt:element) =
-  {element = elt; intensite_feu = 0; calcine = false; estompe = false; brule = false; pompier = 0;};;
+  {element = elt; contamine = false; intensite_feu = 0; calcine = false; estompe = false; brule = false; pompier = 0; pv = 0};;
 
 let terrain_aleatoire hauteur largeur =
   let m = Array.make_matrix hauteur largeur (init_case(Foret)) in
@@ -144,4 +144,3 @@ let reinitialiser_terrain () =
   done;;
 
 allumer_terrain quantite_feu;;
-
