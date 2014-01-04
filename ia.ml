@@ -112,11 +112,11 @@ let objectif_score x y =
       if (terrain.(i).(j).intensite_feu > 0) then
         begin
 			let score = (match terrain.(i).(j).element with
-			|Plaine -> 1
-			|Foret -> 2
-			|Maison -> 3
+			|Plaine -> 10
+			|Foret -> 5
+			|Maison -> 2
 			|_ -> 1) in
-          let d = (30/score)*(abs (j-x)+abs (i-y)) in (*calcul de la distance scorée*)
+          let d = score*(abs (j-x)+abs (i-y)) in (*calcul de la distance scorée*)
           if d < !distance_min then
             begin
               objectifx := j;
