@@ -114,9 +114,9 @@ let objectif_score x y =
 			let score = (match terrain.(i).(j).element with
 			|Plaine -> 1
 			|Foret -> 2
-			|Maison -> 5
+			|Maison -> 3
 			|_ -> 1) in
-          let d = (10/score)*(abs (j-x)+abs (i-y)) in (*calcul de la distance scorée*)
+          let d = (30/score)*(abs (j-x)+abs (i-y)) in (*calcul de la distance scorée*)
           if d < !distance_min then
             begin
               objectifx := j;
