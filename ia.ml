@@ -92,7 +92,7 @@ let objectif x y =
     for j=0 to m-1 do
       if (terrain.(i).(j).intensite_feu > 0) then
         begin
-          let d = (abs (j-x)+abs (i-y)) in (*calcule de la distance*)
+          let d = (abs (j-x)+abs (i-y)) in (*calcul de la distance*)
           if d < !distance_min then
             begin
               objectifx := j;
@@ -104,6 +104,52 @@ let objectif x y =
   done;
   (!objectifx, !objectify);;
 
+let objectif_score x y =
+  let objectifx = ref (-1) and objectify = ref (-1) in
+  let distance_min = ref (n*m) in
+  for i=0 to n-1 do
+    for j=0 to m-1 do
+      if (terrain.(i).(j).intensite_feu > 0) then
+        begin
+			let score = (match terrain.(i).(j).element with
+			|Plaine -> 1
+			|Foret -> 2
+			|Maison -> 5
+			|_ -> 1) in
+          let d = (10/score)*(abs (j-x)+abs (i-y)) in (*calcul de la distance scorée*)
+          if d < !distance_min then
+            begin
+              objectifx := j;
+              objectify := i;
+              distance_min := d;
+            end
+        end;
+    done;
+  done;
+  (!objectifx, !objectify);;
+
+let objectif_feu x y =
+  (*print_string("objectif()");
+  print_newline();*)
+  let objectifx = ref (-1) and objectify = ref (-1) in
+  let distance_min = ref (n*m) in
+  for i=0 to n-1 do
+    for j=0 to m-1 do
+      if (terrain.(i).(j).intensite_feu > 0) then
+        begin
+          let d = terrain.(i).(j).intensite_feu*(abs (j-x)+abs (i-y)) in (*calcul de la distance*)
+          if d < !distance_min then
+            begin
+              objectifx := j;
+              objectify := i;
+              distance_min := d;
+            end
+        end;
+    done;
+  done;
+  (!objectifx, !objectify);;
+
+
 let action_ia_fonce () =
   (*print_string("action_ia_fonce()");
   print_newline();*)
@@ -113,7 +159,10 @@ let action_ia_fonce () =
     pompier_x := x;
     pompier_y := y;
     
-    let (objectifx,objectify) = objectif x y in
+    let (objectifx,objectify) = (match ia_num with
+	|2 -> objectif_score x y
+	|3 -> objectif_feu x y
+	|_ -> objectif x y) in
    (* print_string("Objectif trouvé");
     print_newline();*)
 	(*print_int(!objectifx);
