@@ -75,6 +75,7 @@ let rec poser_pompier () =
 	decr compteur_pompiers;
 	actualiser_nombre_pompiers ();
 	terrain.(!i).(!j).pompier <- 1; (*et au terrain*)
+	terrain.(!i).(!j).pv <- pv_pompier;
 	dessine_case (!i) (!j);
 	poser_pompier ();
       end;
