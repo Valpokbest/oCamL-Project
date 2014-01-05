@@ -31,6 +31,7 @@ let sauver carte num =
 	| Maison -> "03"
 	| Centrale -> "04" in
       output_string fichier biome;
+      if (carte.(i).(j).contamine) then output_string fichier "1" else output_string fichier "0";
       output_string fichier (string_of_int(carte.(i).(j).intensite_feu));
       if (carte.(i).(j).calcine) then output_string fichier "1" else output_string fichier "0";
       if (carte.(i).(j).estompe) then output_string fichier "1" else output_string fichier "0";
@@ -69,6 +70,10 @@ let charger num =
 	    | "04" -> Centrale
 	    | _ -> Eau) in
 	  let case = init_case(elt) in (*on recrée la case selon les infos stockées*)
+	  case.contamine <- (match (input_char fichier) with
+	    | '0' -> false
+	    | '1' -> true
+	    | _ -> false);
 	  case.intensite_feu <- int_of_string(String.make 1 (input_char fichier));
 	  let c = input_char fichier in
 	  case.calcine <- (match c with
