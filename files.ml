@@ -96,7 +96,7 @@ let charger num =
 	  if (pompier > 0) then liste_pompiers := (j,i)::(!liste_pompiers); (*toujours gérer la double structure sur les pompiers*)
 	  let premier_code = String.make 1 (input_char fichier) in
 	  let deuxieme_code = String.make 1 (input_char fichier) in
-	  case.pv <- int_of_string(premier_code^deuxieme_code) in
+	  case.pv <- int_of_string(premier_code^deuxieme_code);
 	  let _ = input_line fichier in
 	  terrain.(i).(j) <- case;
 	done;
