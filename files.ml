@@ -38,7 +38,7 @@ let sauver carte num =
       if (carte.(i).(j).brule) then output_string fichier "1" else output_string fichier "0";
       output_string fichier (string_of_int(carte.(i).(j).pompier));
       if (carte.(i).(j).pompier < 10) then
-      output_string fichier "0"^(string_of_int(carte.(i).(j).pompier)
+      output_string fichier "0"^(string_of_int(carte.(i).(j).pompier))
       else output_string fichier (string_of_int(carte.(i).(j).pompier));
       output_string fichier "\n";
     done;
