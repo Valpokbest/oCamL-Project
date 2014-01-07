@@ -11,7 +11,7 @@ let offset = 10;;
 
 let taille_case = 20;; 
 let largeur_raccourcis = 200;;
-let hauteur_raccourcis = 330;;
+let hauteur_raccourcis = 385;;
 
 let cote =
   let taille_x = min (max_x-3*offset-largeur_raccourcis-50) (m*taille_case) in
@@ -150,7 +150,7 @@ let dessine_raccourcis () =
   if wind then draw_string ("Direction du vent : "^string_of_dir !wind_direction)
   else draw_string "Pas de vent";
   moveto debut_gauche (debut_haut-12*ecart);
-  if rain then draw_string "Pluie"
+  if (rain && advanced_simulation) then draw_string "Pluie"
   else draw_string "Pas de pluie";
 ;;
 
@@ -192,7 +192,7 @@ let actualiser_vent () =
   set_color black;
   moveto debut_gauche debut_haut;
   
-  if wind then draw_string ("Direction du vent : "^string_of_dir !wind_direction)
+  if (wind && advanced_simulation) then draw_string ("Direction du vent : "^string_of_dir !wind_direction)
   else draw_string "Pas de vent";
 ;;
 
