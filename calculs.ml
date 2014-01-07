@@ -171,7 +171,7 @@ let explosion carte k l =
     for j=0 to m-1 do
     
 	if ((abs (i+coeffx-k) + abs (j+coeffy-l)) < 5) then (*5 est le rayon d'explosion*)
-	(add_nuage !nuage j i;
+	(nuage := add_nuage !nuage j i;
       if (carte.(i).(j).element <> Eau) then
 	  (carte.(i).(j).intensite_feu <- 0;
 	   carte.(i).(j).calcine <- true;
@@ -179,7 +179,7 @@ let explosion carte k l =
 	   supprimer_pompier j i;))	(*et de la liste*)
 	   
 	else if ((abs (i+coeffx-k) + abs (j+coeffy-l)) = 5) then
-	(add_nuage !nuage j i;
+	(nuage := add_nuage !nuage j i;
       if (carte.(i).(j).element <> Eau) then
 	  (allumer_feu carte.(i).(j);
 	   carte.(i).(j).pompier <- 0;
